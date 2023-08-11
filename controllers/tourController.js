@@ -51,7 +51,7 @@ const getAllTour = async (req, res) => {
     }
 
     // EXECUTE QUERY
-    const tours = await query.exec();
+    const tours = await query;
 
     // SEND RESPONSE
     res.status(200).json({
