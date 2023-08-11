@@ -4,14 +4,17 @@
   "description": "First Node JS Project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "dev": "nodemon server.js",
+    "prod": "set NODE_ENV=production && nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
