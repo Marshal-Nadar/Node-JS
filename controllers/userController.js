@@ -1,25 +1,26 @@
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const factory = require('./handlerFactory');
 
-const getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
+// const getAllUsers = catchAsync(async (req, res) => {
+//   const users = await User.find();
 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    result: users.length,
-    data: {
-      users,
-    },
-  });
-});
+//   // SEND RESPONSE
+//   res.status(200).json({
+//     status: 'success',
+//     requestedAt: req.requestTime,
+//     result: users.length,
+//     data: {
+//       users,
+//     },
+//   });
+// });
 
 const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not yet defined!',
+    message: 'This route is not yet defined! Please use Signup instead',
   });
 };
 
@@ -70,24 +71,30 @@ const deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-const getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+// const getUser = (req, res) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'This route is not yet defined!',
+//   });
+// };
+
+// const updateUser = (req, res) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'This route is not yet defined!',
+//   });
+// };
+const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
+
+const getAllUsers = factory.getAll(User);
+const getUser = factory.getOne(User);
+
+// Do NOT update passwords with this!
+const updateUser = factory.updateOne(User);
+const deleteUser = factory.deleteOne(User);
 
 module.exports = {
   getAllUsers,
@@ -97,4 +104,5 @@ module.exports = {
   deleteUser,
   updateMe,
   deleteMe,
+  getMe,
 };
