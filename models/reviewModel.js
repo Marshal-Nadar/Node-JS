@@ -65,10 +65,17 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   ]);
   console.log('stats', stats);
 
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].nRating,
-    ratingsAverage: stats[0].avgRating,
-  });
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
 };
 
 reviewSchema.post('save', function () {
@@ -78,10 +85,33 @@ reviewSchema.post('save', function () {
 
 // findByIdAndUpdate
 // findByIdAndDelete
-reviewSchema.pre('/^findOneAnd/', async function (next) {
-  const r = await this.findOne();
-  console.log(r);
+
+reviewSchema.pre('findOneAndUpdate', async function (next) {
+  this._id = this.getQuery()._id; // Get the document ID
   next();
+});
+
+reviewSchema.post('findOneAndUpdate', async function () {
+  const doc = await this.model.findById(this._id); // Retrieve the document by ID
+
+  if (!doc) {
+    // Handle the case where the document is not found
+    return;
+  }
+
+  await doc.constructor.calcAverageRatings(doc.tour);
+});
+
+reviewSchema.pre('findOneAndDelete', async function (next) {
+  this._id = this.getQuery()._id; // Get the document ID
+  next();
+});
+
+reviewSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    // If a document was found and deleted
+    await doc.constructor.calcAverageRatings(doc.tour);
+  }
 });
 
 const Review = mongoose.model('Review', reviewSchema);

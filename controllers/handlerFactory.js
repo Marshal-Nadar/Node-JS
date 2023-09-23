@@ -18,6 +18,7 @@ const deleteOne = (Model) =>
 
 const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // console.log('req.params.id', req.params.id);
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -74,7 +75,7 @@ const getAll = (Model) =>
       .limitFields()
       .paginate();
 
-    const doc = await features.query.explain();
+    const doc = await features.query;
     // const doc = await features.query.explain();
 
     // SEND RESPONSE
