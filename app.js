@@ -84,10 +84,10 @@ app.use((req, res, next) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 app.use('/api/v1/tours', tourRouter);
-app.use((req, res, next) => {
-  console.log('Log the populated tour object', req.tour); // Log the populated tour object
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('Log the populated tour object', req.tour); // Log the populated tour object
+//   next();
+// });
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRoutes);

@@ -82,7 +82,7 @@ const login = async (req, res, next) => {
 };
 
 const protect = catchAsync(async (req, res, next) => {
-  console.log('missispppis');
+  // console.log('missispppis');
   // 1) Getting token and check if it's there
   let token;
   if (
@@ -105,7 +105,7 @@ const protect = catchAsync(async (req, res, next) => {
 
   // 3) Check user if still exists
   const currentUser = await User.findById(decoded.id);
-  console.log('reqreqreqreqreq', currentUser);
+  // console.log('reqreqreqreqreq', currentUser);
 
   if (!currentUser) {
     return next(
@@ -136,7 +136,7 @@ const restrictTo = (...roles) => {
   // checkDataType(...roles);
 
   return function (req, res, next) {
-    console.log('ertyuipoihbn cvdsrdfgvbn');
+    // console.log('ertyuipoihbn cvdsrdfgvbn');
     // roles ['admin', 'lead-guide'].role = 'user'
     // req.user.role comes from previous routes/middleware (ie. protect middleware)
 
