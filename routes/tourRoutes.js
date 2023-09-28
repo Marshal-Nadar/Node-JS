@@ -13,6 +13,8 @@ const {
   aliasTopTour,
   getTourStatus,
   getMonthlyPlan,
+  getTourWithin,
+  getDistances,
 } = require('../controllers/tourController');
 
 // const { createReview } = require('../controllers/reviewController');
@@ -36,6 +38,14 @@ router.route('/tour-stats').get(getTourStatus);
 router
   .route('/monthly-plan/:year')
   .get(protect, restrictTo('admin', 'lead-guide'), getMonthlyPlan);
+
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(getTourWithin);
+// /tours-within?distance=233&center=-40,45&unit=mi
+// /tours-within/233/center/-40,45/unit/mi
+
+router.route('/distances/:latlng/unit/:unit').get(getDistances);
 
 router
   .route('/')
