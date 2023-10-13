@@ -6,7 +6,8 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
 const hpp = require('hpp');
-
+const path = require('path');
+const cookieParser = require('cookie-parser');
 // Routes
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -17,7 +18,15 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // Global Middlewares
+
+// Serving stactic files
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Set security HTTP Headers
 app.use(helmet());
 
@@ -38,6 +47,7 @@ app.use('/api', limiter);
 // Body Parser, reading data from body into req.body
 // When body is greater than 10KB, it won't accept
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -59,9 +69,6 @@ app.use(
   })
 );
 
-// Serving stactic files
-app.use(express.static(`${__dirname}/public`));
-
 // app.use((req, res, next) => {
 //   console.log('Hello from middleware');
 //   next();
@@ -73,8 +80,11 @@ app.use((req, res, next) => {
   // console.log(req.headers);
   // To Test Global ERROR
   // console.log(x);
+  console.log(req.cookies);
   next();
 });
+
+// 3) Routes
 
 // app.get('/api/v1/tours', getAllTour);
 // app.post('/api/v1/tours', createTour);
@@ -82,6 +92,13 @@ app.use((req, res, next) => {
 // app.get('/api/v1/tours/:id', getTour);
 // app.patch('/api/v1/tours/:id', updateTour);
 // app.delete('/api/v1/tours/:id', deleteTour);
+
+// Test Middleware
+// app.use('/', (req, res,) => {
+//   res.status(200).render('base', {
+//     tour: 'The Forest Hiker',
+//   });
+// });
 
 app.use('/api/v1/tours', tourRouter);
 // app.use((req, res, next) => {

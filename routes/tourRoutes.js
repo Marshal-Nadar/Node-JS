@@ -15,6 +15,7 @@ const {
   getMonthlyPlan,
   getTourWithin,
   getDistances,
+  getTourBySlug,
 } = require('../controllers/tourController');
 
 // const { createReview } = require('../controllers/reviewController');
@@ -46,6 +47,8 @@ router
 // /tours-within/233/center/-40,45/unit/mi
 
 router.route('/distances/:latlng/unit/:unit').get(getDistances);
+
+router.route('/get-by-slug/:slug').get(getTourBySlug);
 
 router
   .route('/')

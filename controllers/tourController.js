@@ -87,6 +87,8 @@ const getAllTour = factory.getAll(Tour);
 
 const getTour = factory.getOne(Tour, { path: 'reviews' });
 
+const getTourBySlug = factory.getOneBySlug(Tour);
+
 // const getTour = catchAsync(async (req, res, next) => {
 //   // try {
 //   const tour = await Tour.findById(req.params.id).populate('reviews');
@@ -350,6 +352,7 @@ module.exports = {
   getMonthlyPlan,
   getTourWithin,
   getDistances,
+  getTourBySlug,
   // CheckID,
   // checkBody,
 };

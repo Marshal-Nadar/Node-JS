@@ -62,6 +62,28 @@ const getOne = (Model, popOptions) =>
       },
     });
   });
+const getOneBySlug = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findOne({ slug: req.params.slug }).populate({
+      path: 'reviews',
+      fields: 'review rating user',
+    });
+    console.log('kjbknkjh', query);
+    // if (popOptions) query = query.populate(popOptions);
+
+    const doc = await query;
+
+    if (!doc) {
+      return next(new AppError('No documnet found with that ID', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
 
 const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -89,4 +111,11 @@ const getAll = (Model) =>
     });
   });
 
-module.exports = { createOne, deleteOne, updateOne, getOne, getAll };
+module.exports = {
+  createOne,
+  deleteOne,
+  updateOne,
+  getOne,
+  getAll,
+  getOneBySlug,
+};
