@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
@@ -49,6 +50,15 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
 
+// Enable CORS for all routes
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3001',
+    optionsSuccessStatus: 200,
+  })
+);
+
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
@@ -80,7 +90,7 @@ app.use((req, res, next) => {
   // console.log(req.headers);
   // To Test Global ERROR
   // console.log(x);
-  console.log(req.cookies);
+  console.log('req.cookies', req.cookies);
   next();
 });
 
