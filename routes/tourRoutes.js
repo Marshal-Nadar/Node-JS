@@ -48,7 +48,7 @@ router
 
 router.route('/distances/:latlng/unit/:unit').get(getDistances);
 
-router.route('/get-by-slug/:slug').get(getTourBySlug);
+router.route('/get-by-slug/:slug').get(protect, getTourBySlug);
 
 router
   .route('/')
