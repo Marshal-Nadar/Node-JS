@@ -16,6 +16,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const { isLoggedIn } = require('./controllers/authController');
 
 const app = express();
 
@@ -51,13 +52,17 @@ app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
 
 // Enable CORS for all routes
-app.use(
-  cors({
-    credentials: true,
-    origin: 'http://localhost:3001',
-    optionsSuccessStatus: 200,
-  })
-);
+const corsOptions = {
+  // set origin to a specific origin.
+  origin: 'http://localhost:3001',
+
+  // or, set origin to true to reflect the request origin
+  //origin: true,
+
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -109,6 +114,8 @@ app.use((req, res, next) => {
 //     tour: 'The Forest Hiker',
 //   });
 // });
+
+app.use(isLoggedIn);
 
 app.use('/api/v1/tours', tourRouter);
 // app.use((req, res, next) => {
